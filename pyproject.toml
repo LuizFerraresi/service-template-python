@@ -4,7 +4,10 @@ version = "0.1.0"
 requires-python = ">= 3.12"
 
 dependencies = [
-
+    "dependency_injector-4.48.2",
+    "fastapi-0.119.0",
+    "pydantic-2.12.3",
+    "pydantic_settings-2.11.0"
 ]
 
 [project.optional-dependencies]
@@ -18,7 +21,7 @@ development = [
     "pre_commit==4.2.0",
     "pyright==1.1.404",
     "bandit==1.8.6"
-] 
+]
 
 [tool.bandit]
 targets = ['src']
