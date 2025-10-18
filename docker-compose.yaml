@@ -1,0 +1,31 @@
+
+name: Project Template Python
+
+networks:
+  stack-network:
+    driver: bridge
+
+services:
+  application:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - progress=plain
+      ssh:
+        - default
+      target: runtime
+    networks:
+      - stack-network
+    ports:
+      - ${UVICORN_PORT}:${UVICORN_PORT}
+    environment:
+      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
+    env_file:
+      - .env.sample
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${UVICORN_PORT}/healthcheck/ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
