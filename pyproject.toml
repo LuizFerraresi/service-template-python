@@ -1,13 +1,22 @@
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [project]
 name = "service-template-python"
 version = "0.1.0"
 requires-python = ">= 3.12"
+package-mode = false
 
 dependencies = [
-
+    "uvicorn[standard]==0.38.0",
+    "dependency-injector==4.48.2",
+    "fastapi==0.119.0",
+    "pydantic==2.12.3",
+    "pydantic-settings==2.11.0"
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 development = [
     "pytest==8.3.4",
     "pytest-asyncio>=0.23.5",
