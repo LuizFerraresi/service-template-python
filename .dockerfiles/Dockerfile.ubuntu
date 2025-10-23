@@ -1,6 +1,6 @@
 FROM ubuntu:22.04 AS base
 
-ENV APP_ROOT="/company"
+ENV APP_ROOT="/app"
 
 # Create a dedicated group and user (non-root)
 ARG UID=1000
@@ -63,8 +63,10 @@ ENV VIRTUAL_ENV="${APP_ROOT}/.venv"
 ENV PATH="${VIRTUAL_ENV}/bin:$PATH"
 
 COPY --from=builder --chown=appuser:appgroup ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --chown=appuser:appgroup app/ ${APP_ROOT}/app/
+COPY --chown=appuser:appgroup src/ ${APP_ROOT}/
+
+WORKDIR /app/template
 
 USER appuser
 
-CMD ["uvicorn", "app:api:app"]
+CMD ["uvicorn", "api:app"]

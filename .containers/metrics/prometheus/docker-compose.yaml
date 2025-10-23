@@ -1,0 +1,56 @@
+
+
+volumes:
+  prometheus-data:
+
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.7.1
+    container_name: prometheus
+    restart: unless-stopped
+    networks:
+      - stack-network
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config.yaml:/etc/prometheus/config.yaml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/config.yaml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=1h"
+      - "--web.enable-lifecycle"   # allows reloads via API
+      - "--web.enable-remote-write-receiver"
+    depends_on:
+      - cadvisor
+      - node-exporter
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    networks:
+      - stack-network
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+
+  node-exporter:
+    image: prom/node-exporter:v1.9.1
+    container_name: node-exporter
+    network_mode: host
+    pid: host
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /run/udev/data:/run/udev/data:ro
+    command:
+      - '--path.rootfs=/rootfs'

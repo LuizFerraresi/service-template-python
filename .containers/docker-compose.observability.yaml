@@ -1,0 +1,8 @@
+include:
+  - ./metrics/prometheus/docker-compose.yaml
+  # - ./metrics/mimir/docker-compose.yaml
+  - ./logs/promtail/docker-compose.yaml
+  - ./logs/loki/docker-compose.yaml
+  - ./traces/otel-collector/docker-compose.yaml
+  - ./traces/tempo/docker-compose.yaml
+  - ./vizualization/grafana/docker-compose.yaml

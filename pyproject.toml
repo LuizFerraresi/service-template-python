@@ -2,18 +2,39 @@
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry]
+requires-poetry = ">=2.0"
+package-mode = false
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9.0"
+
+# [[tool.poetry.source]]
+# name = "private"
+# url = "https://github.com/LuizFerraresi/toolbox"
+
+[project.urls]
+repository = "https://github.com/LuizFerraresi/service-template-python"
+
 [project]
 name = "service-template-python"
 version = "0.1.0"
-requires-python = ">= 3.12"
-package-mode = false
+requires-python = ">=3.12.3,<4.0.0"
+readme =  {file = "README.txt", content-type = "text/markdown"}
+license-files = [
+    "LICENSE"
+]
 
 dependencies = [
     "uvicorn[standard]==0.38.0",
     "dependency-injector==4.48.2",
     "fastapi==0.119.0",
     "pydantic==2.12.3",
-    "pydantic-settings==2.11.0"
+    "pydantic-settings==2.11.0",
+    "prometheus-client (>=0.23.1,<0.24.0)",
+    "loguru (>=0.7.3,<0.8.0)",
+    "sqlalchemy (>=2.0.44,<3.0.0)",
+    "asyncpg (>=0.30.0,<0.31.0)",
 ]
 
 [dependency-groups]
@@ -27,7 +48,7 @@ development = [
     "pre_commit==4.2.0",
     "pyright==1.1.404",
     "bandit==1.8.6"
-] 
+]
 
 [tool.bandit]
 targets = ['src']

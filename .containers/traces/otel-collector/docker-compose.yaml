@@ -1,0 +1,16 @@
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector:0.137.0
+    container_name: otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otel/config.yaml"]
+    networks:
+      - stack-network
+    ports:
+      - "4317"   # OTLP gRPC
+      - "4318"   # OTLP HTTP
+      - "9090"   # Healthcheck
+    volumes:
+      - ./config.yaml:/etc/otel/config.yaml:ro
+      - ./.data:/etc/otelcol-contrib/.data

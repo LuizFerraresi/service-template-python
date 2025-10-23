@@ -1,0 +1,27 @@
+
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DATABASE_SELF_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_SELF_PASSWORD}
+      POSTGRES_DB: ${DATABASE_SELF_NAME}
+    networks:
+      - stack-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres.conf:/etc/postgresql/postgresql.conf:ro
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_SELF_USERNAME} -d ${DATABASE_SELF_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

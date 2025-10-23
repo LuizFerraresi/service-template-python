@@ -1,0 +1,12 @@
+
+services:
+  redpanda-console:
+    image: redpanda/console:latest
+    container_name: redpanda-console
+    environment:
+      REDPANDA_BROKERS: "redpanda:9092"
+      REDPANDA_ADMIN: "redpanda:9644"
+    ports:
+      - "8080:8080"     # Web UI
+    depends_on:
+      - redpanda
