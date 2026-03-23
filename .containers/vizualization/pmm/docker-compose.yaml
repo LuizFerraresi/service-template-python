@@ -1,0 +1,13 @@
+services:
+  pmm:
+    image: percona/pmm-server:2
+    container_name: pmm
+    restart: unless-stopped
+    ports:
+      - "8080:80"     # Web UI
+      - "443:443"     # Secure access
+    volumes:
+      - pmm-data:/srv
+    environment:
+      PMM_ADMIN_USER: admin
+      PMM_ADMIN_PASSWORD: admin

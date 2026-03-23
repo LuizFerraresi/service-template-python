@@ -1,0 +1,36 @@
+version: "3"
+
+vars:
+  repository:
+    sh: basename -s .git $(git config --get remote.origin.url)
+
+tasks:
+
+  project:install:
+    desc: ""
+    cmds:
+      - direnv allow .
+      - pyenv local
+      - pip install --no-cache-dir --upgrade pip build wheel setuptools poetry
+      - poetry config virtualenvs.create true
+      - poetry config virtualenvs.in-project true
+      - poetry self add poetry-plugin-export
+      - poetry lock
+      - poetry install --no-root --with development
+      - pre-commit install
+
+  app:build:
+    desc: "Build Application Docker Image"
+    cmds:
+      - docker compose 
+        --project-name {{ .repository }}
+        --file docker-compose.yaml 
+        build application
+  
+  app:run:
+    desc: "Run Application Container from Image"
+    cmds: 
+      - docker compose
+        --project-name {{ .repository }}
+        --file docker-compose.yaml 
+        up --remove-orphans

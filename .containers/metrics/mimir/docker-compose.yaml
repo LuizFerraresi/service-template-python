@@ -1,0 +1,22 @@
+
+services:
+  mimir:
+    image: grafana/mimir:2.17.0
+    container_name: mimir
+    restart: unless-stopped
+    networks:
+      - stack-network
+    ports:
+      - "9009:9009"  # Mimir HTTP API
+    volumes:
+      - ./config.yaml:/etc/mimir/config.yaml:ro
+      - ./runtime.yaml:/etc/mimir/runtime.yaml:ro
+      - mimir-data:/data
+    command: 
+      - "-config.file=/etc/mimir/config.yaml"
+      - "-target=all"
+    depends_on:
+      - prometheus
+
+volumes:
+  mimir-data:

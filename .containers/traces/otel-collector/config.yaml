@@ -1,0 +1,48 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 5s
+    limit_percentage: 90
+    spike_limit_percentage: 20
+
+  batch:
+
+exporters:
+  debug:
+    verbosity: detailed
+
+  file/traces:
+    path: /etc/otelcol-contrib/.data/traces.log
+  
+  otlp/tempo:
+    endpoint: 'tempo:4317'
+    tls:
+      insecure: true
+  
+  prometheus:
+    endpoint: '0.0.0.0:9464'
+
+extensions:
+  health_check:
+    endpoint: '0.0.0.0:9090'
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: 
+        - otlp
+      processors: 
+        - memory_limiter
+        - batch
+      exporters: 
+        - debug
+        - file/traces
+        - otlp/tempo
